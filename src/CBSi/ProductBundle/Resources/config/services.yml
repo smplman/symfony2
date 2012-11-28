@@ -1,0 +1,7 @@
+parameters:
+#    cb_si_product.example.class: CBSi\ProductBundle\Example
+
+services:
+#    cb_si_product.example:
+#        class: %cb_si_product.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

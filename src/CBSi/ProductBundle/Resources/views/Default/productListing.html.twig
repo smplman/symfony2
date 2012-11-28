@@ -1,0 +1,28 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+<table class="table">
+	<tr>
+		<th>
+			<span>ID</span>
+		</th>
+
+		<th>
+			<span>Name</span>
+		</th>
+
+		<th>
+			<span>Description</span>
+		</th>
+
+		<th>
+			<span>Price</span>
+		</th>						
+	</tr>
+	{% for product in products %}
+
+		{% include "CBSiProductBundle:Default:singleProduct.html.twig" %}
+
+	{% endfor %}
+</table>
+{% endblock %}

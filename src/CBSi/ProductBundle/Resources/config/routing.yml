@@ -1,0 +1,7 @@
+cbsi_product_listing:
+    pattern:  /productlisting
+    defaults: { _controller: CBSiProductBundle:Default:showProducts }
+
+cbsi_product_single:
+    pattern: /product/{id}
+    defaults: { _controller: CBSiProductBundle:Default:showSingle }
