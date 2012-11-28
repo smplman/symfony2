@@ -4,6 +4,7 @@ namespace CBSi\ProductBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use CBSi\ProductBundle\Model\Product;
+use Guzzle\Http\Client;
 
 class DefaultController extends Controller
 {
@@ -14,41 +15,46 @@ class DefaultController extends Controller
 
     public function showProductsAction(){
 
-    	$product1 = new Product(1, 'Product 1', 'This is the first product', 2.00);
-    	$product2 = new Product(2, 'Product 2', 'This is the second product', 6.60);
-    	$product3 = new Product(3, 'Product 3', 'This is the third product', 1.50);
-    	$product4 = new Product(4, 'Product 4', 'This is the fourth product', 8.20);
-    	$product5 = new Product(5, 'Product 5', 'This is the fifth product', 4.01);
-
-    	$products = array($product1,$product2,$product3,$product4,$product5);
+    	$products = $this->getProducts();
 
     	return $this->render('CBSiProductBundle:Default:productListing.html.twig', array('products' => $products));
     }
 
     public function showSingleAction($id){
 
-    	$product1 = new Product(1, 'Product 1', 'This is the first product', 2.00);
-    	$product2 = new Product(2, 'Product 2', 'This is the second product', 6.60);
-    	$product3 = new Product(3, 'Product 3', 'This is the third product', 1.50);
-    	$product4 = new Product(4, 'Product 4', 'This is the fourth product', 8.20);
-    	$product5 = new Product(5, 'Product 5', 'This is the fifth product', 4.01);
-
-    	$products = array($product1,$product2,$product3,$product4,$product5);
-    	
-    	$hasProduct = false;
-
-    	foreach ($products as $product){
-    		if($product->getId()==intval($id)){
-    			$hasProduct = true;
-    		}
-    	}
-
-    	if($hasProduct){
-    		$products = array($products[$id-1]);
-    	}else{
-    		throw $this->createNotFoundException('The product ID ' . $id .'does not exist');
-    	}
+    	$products = $this->getProducts($id);
+    	if(is_null($products)){
+    		throw $this->createNotFoundException('The product ID ' . $id .'does not exist'); 
+    	}   
 
     	return $this->render('CBSiProductBundle:Default:productListing.html.twig', array('products' => $products));
+    }
+
+    private function getProducts($id=null){
+		$hostName = 'http://ec2-184-169-221-118.us-west-1.compute.amazonaws.com/';
+		// Create a client and provide a base URL
+		$client = new Client($hostName);
+		// Create a request with basic Auth
+		$endPoint = !is_null($id) ? ('/products/'. $id .'.json') : ('products.json');
+		$request = $client->get($endPoint);
+		// Send the request and get the response
+		try{
+			$response = $request->send();
+		}catch(Exception $e){
+			return null;
+		}
+
+		$jsonProducts =  json_decode($response->getBody(), true);
+		
+		if($id){
+			$jsonProducts = array($jsonProducts);
+		}
+		$products = array();
+
+		foreach ($jsonProducts as $product) {
+			array_push($products, new Product($product['id'], $product['name'], $product['description'], $product['price']));
+		}    
+
+		return $products;	
     }
 }

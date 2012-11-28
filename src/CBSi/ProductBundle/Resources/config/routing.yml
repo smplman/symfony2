@@ -1,5 +1,5 @@
 cbsi_product_listing:
-    pattern:  /productlisting
+    pattern:  /products
     defaults: { _controller: CBSiProductBundle:Default:showProducts }
 
 cbsi_product_single:
