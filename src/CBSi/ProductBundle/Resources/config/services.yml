@@ -7,4 +7,4 @@ services:
 #        arguments: [@service_id, "plain_value", %parameter%]
     Product.ApiClient:
         class: CBSi\ProductBundle\ApiClient
-#       arguments: []
+        arguments: ["http://ec2-184-169-221-118.us-west-1.compute.amazonaws.com/"]

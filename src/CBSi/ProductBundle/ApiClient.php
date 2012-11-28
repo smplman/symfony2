@@ -6,11 +6,15 @@ use CBSi\ProductBundle\Model\Product;
 
 class ApiClient
 {
+	public function __construct($hostName){
+		$this->hostName = $hostName;
+	}
+
 	public function getAction($path){
 
-		$hostName = 'http://ec2-184-169-221-118.us-west-1.compute.amazonaws.com/';
+		//$hostName = 'http://ec2-184-169-221-118.us-west-1.compute.amazonaws.com/';
 		// Create a client and provide a base URL
-		$client = new Client($hostName);
+		$client = new Client($this->hostName);
 		// Create a request with basic Auth
 		$request = $client->get($path);
 		// Send the request and get the response
@@ -20,8 +24,9 @@ class ApiClient
 			return null;
 		}
 
-		$jsonProducts =  json_decode($response->getBody(), true); 
+		return json_decode($response->getBody(), true);
 
-		return $jsonProducts;	
+		$products = array();
+
     }
 }
