@@ -2,3 +2,6 @@
 #_internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
 #    prefix:   /_internal
+homepage:
+    pattern:   /
+    defaults:  { _controller: MainBundle:Default:index }
