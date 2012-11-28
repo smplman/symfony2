@@ -5,3 +5,6 @@ services:
 #    cb_si_product.example:
 #        class: %cb_si_product.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    Product.ApiClient:
+        class: CBSi\ProductBundle\ApiClient
+#       arguments: []
